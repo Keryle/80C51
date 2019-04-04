@@ -22,7 +22,7 @@ _rank:         ;首地址传递到a
   mov r6,#_Num;循环次数
   mov r0,a  ; r0 首地址
 01$:
-  clr 0
+  clr 0x00
 03$:
   mov a,@r0
   mov r2,a
