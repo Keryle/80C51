@@ -15,9 +15,9 @@
          sdcc头文件#include <8051.h>
    keil中sbit led1 = P1 ^ 0; 而在SDCC是这样子写： 
               
-              sbit at 0x90 led1; 
+              sbit at 0x90 P1_0; 
             或 
-              __sbit __at 0x90 led1;
+              __sbit __at 0x90 P1_0;
           
    在atom中使用快捷键Ctrl + Shift + C复制*.c文件地址（假如为c：\test\my.c）,
    在powershell中输入
@@ -40,4 +40,4 @@
   再输入命令生成*.hex文件
 
        packihx c：\test\my.ihx > c：\test\my.hex
-  如果生成hex文件有问题请使用cmd输入上述命令重新生成hex文件。
+  如果生成hex文件有问题,请使用cmd输入上述命令重新生成hex文件。
