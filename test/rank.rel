@@ -1,0 +1,11 @@
+XH3
+H 3 areas 2 global symbols
+S _main Ref000000
+S .__.ABS. Def000000
+A _CODE size 0 flags 0 addr 0
+A home size 3 flags 8 addr 0
+A code size 2 flags 20 addr 0
+T 00 00 00 02 00 00
+R 00 00 00 01 02 04 00 00
+T 00 00 00 C2 A4
+R 00 00 00 02
