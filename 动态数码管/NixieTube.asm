@@ -14,9 +14,9 @@ sjmp _main
 ;使数码管从右往左依次显示01234567
 ;------------------------------------------------------------------------------
 _main:
-1$:
-  mov r7,#1
-  mov r3,#0
+01$:
+  mov r4,#0x08
+  mov r3,#0x00
 02$:
   mov a,r3
   mov b,r3
@@ -24,8 +24,8 @@ _main:
   lcall _display
   lcall _delay1ms
   mov _P0,#0x00
-  djnz r7,02$
-  sjmp 1$
+  djnz r4,02$
+  sjmp 01$
 
 ;延时函数
 _delay1ms:      ;晶振12M
