@@ -39,8 +39,8 @@ home3                               00000000    00000002 =           2. bytes (A
      00000018  s_REG_BANK_3                    
      00000020  s_BSEG_BYTES                    
      00000020  s__CODE                         
-     00000028  l_home1                         
-     0000002B  l_DSEG                          
+     0000002C  l_home1                         
+     0000002F  l_DSEG                          
      00000100  l_IRAM                          
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
@@ -57,7 +57,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-home1                               00000000    00000028 =          40. bytes (ABS,CON)
+home1                               00000000    0000002C =          44. bytes (ABS,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -86,7 +86,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-DSEG                                00000000    0000002B =          43. bytes (REL,CON)
+DSEG                                00000000    0000002F =          47. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------

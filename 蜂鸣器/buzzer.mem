@@ -3,7 +3,7 @@ Internal RAM layout:
 0x00:|A|A|A| | | | | | | | |A|A|A|A|A|
 0x10:|A|A|A|A|A|A|A|A|A|A|A|A|A|A|A|A|
 0x20:|A|A|A|A|A|A|A|A|A|A|A|A|A|A|A|A|
-0x30:|A|A|A| | | | | | | | | | | | | |
+0x30:|A|A|A|A|A|A|A| | | | | | | | | |
 0x40:| | | | | | | | | | | | | | | | |
 0x50:| | | | | | | | | | | | | | | | |
 0x60:| | | | | | | | | | | | | | | | |
@@ -19,7 +19,7 @@ Internal RAM layout:
 0-3:Reg Banks, T:Bit regs, a-z:Data, B:Bits, Q:Overlay, I:iData, S:Stack, A:Absolute
 
 No clue at where the stack begins and ends!
-The largest spare internal RAM space starts at 0x33 with 205 bytes available.
+The largest spare internal RAM space starts at 0x37 with 201 bytes available.
 
 Other memory:
    Name             Start    End      Size     Max     

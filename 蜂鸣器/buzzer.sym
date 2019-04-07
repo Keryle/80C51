@@ -74,7 +74,7 @@ Symbol Table
     _ES     =  0000AC     |     _ET0    =  0000A9     |     _ET1    =  0000AB 
     _ET2    =  0000AD     |     _EX0    =  0000A8     |     _EX1    =  0000AA 
     _EXEN2  =  0000CB     |     _EXF2   =  0000CE     |     _F0     =  0000D5 
-    _F1     =  0000D1     |   3 _FindSta   000025 R   |     _IE     =  0000A8 
+    _F1     =  0000D1     |   3 _FindSta   000026 R   |     _IE     =  0000A8 
     _IE0    =  000089     |     _IE1    =  00008B     |     _INT0   =  0000B2 
     _INT1   =  0000B3     |     _IP     =  0000B8     |     _IT0    =  000088 
     _IT1    =  00008A     |     _OV     =  0000D2     |     _P      =  0000D0 
@@ -182,7 +182,7 @@ Area Table
    0 _CODE      size      0   flags    0
    1 home       size      0   flags    8
    2 home0      size      3   flags    8
-   3 home1      size     28   flags    8
+   3 home1      size     2C   flags    8
    4 home2      size      2   flags    8
    5 home3      size      2   flags    8
 

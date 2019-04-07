@@ -19,18 +19,21 @@ _TimerIntterupt0:
   mov a,#0x00
   lcall _FindStartT0
   cpl _P1_5               ;取反输出波形
+  reti
 
 
 
 _FindStartT0:
+  mov r4,a
   mov dptr,#0x1000
   movc a,@a+dptr
   mov _TL0,a            ;查表赋值低位
   mov dptr,#0x1010
-  mov a,#0x00
+  mov a,r4
   movc a,@a+dptr
   mov _TH0,a            ;查表赋值高位
   setb _TR0             ;启动定时器0
+  ret
 
 
 .org 0x1000               ;TL
