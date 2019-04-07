@@ -27,6 +27,7 @@ _FindStartT0:
   movc a,@a+dptr
   mov _TL0,a            ;查表赋值低位
   mov dptr,#0x1010
+  mov a,#0x00
   movc a,@a+dptr
   mov _TH0,a            ;查表赋值高位
   setb _TR0             ;启动定时器0

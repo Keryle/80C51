@@ -1,0 +1,18 @@
+-muwx
+-i buzzer.ihx
+-M
+-Y
+-b HOME = 0x0000
+-b XSEG = 0x0001
+-b PSEG = 0x0001
+-b ISEG = 0x0000
+-b BSEG = 0x0000
+-k D:\usr\sdcc\bin\..\lib\small
+-l mcs51
+-l libsdcc
+-l libint
+-l liblong
+-l libfloat
+C:\Users\HP\A51\·äÃùÆ÷.\buzzer.rel
+
+-e

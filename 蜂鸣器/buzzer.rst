@@ -121,15 +121,15 @@
                            0000CF   120 _TF2	=	0x00cf
                                       2 .area home (abs)
       000000                          3 .org 0x0000
-      000000 02r00r0E         [24]    4 ljmp _main
+      000000 02 00 0E         [24]    4 ljmp _main
       00000B                          5 .org 0x000b
-      00000B 02r00r1C         [24]    6 ljmp _TimerIntterupt0
+      00000B 02 00 1C         [24]    6 ljmp _TimerIntterupt0
       00000E                          7 _main:
       00000E 75 89 00         [24]    8   mov _TMOD,#0x00  ;定时器0，方式0，13位定时器
       000011 D2 AF            [12]    9   setb _EA
       000013 D2 A9            [12]   10   setb _ET0
       000015 74 00            [12]   11   mov a,#0x00
-      000017 12r00r25         [24]   12   lcall _FindStartT0
+      000017 12 00 25         [24]   12   lcall _FindStartT0
       00001A                         13 01$:
       00001A 80 FE            [24]   14   sjmp 01$
                                      15 
@@ -137,7 +137,7 @@
       00001C                         17 _TimerIntterupt0:
       00001C C2 8C            [12]   18   clr _TR0
       00001E 74 00            [12]   19   mov a,#0x00
-      000020 12r00r25         [24]   20   lcall _FindStartT0
+      000020 12 00 25         [24]   20   lcall _FindStartT0
       000023 B2 95            [12]   21   cpl _P1_5               ;取反输出波形
                                      22 
                                      23 
