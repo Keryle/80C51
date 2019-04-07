@@ -51,10 +51,10 @@ _StartT1:
 
 _FindStartT0:
   mov r4,a
-  mov dptr,#0x1000
+  mov dptr,#0x0070
   movc a,@a+dptr
   mov _TL0,a            ;查表赋值低位
-  mov dptr,#0x1010
+  mov dptr,#0x080
   mov a,r4
   movc a,@a+dptr
   mov _TH0,a            ;查表赋值高位
@@ -63,7 +63,7 @@ _FindStartT0:
   ret
 
 ;timer0定时初值表格
-.org 0x1000               ;TL
+.org 0x0070               ;TL
 .db 0x11,0x88
-.org 0x1010               ;TH
+.org 0x0080               ;TH
 .db 0x1e,0x1f
