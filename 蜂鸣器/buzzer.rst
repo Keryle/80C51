@@ -121,41 +121,63 @@
                            0000CF   120 _TF2	=	0x00cf
                                       2 .area home (abs)
       000000                          3 .org 0x0000
-      000000 02 00 0E         [24]    4 ljmp _main
+      000000 02 00 1E         [24]    4 ljmp _main
       00000B                          5 .org 0x000b
-      00000B 02 00 1C         [24]    6 ljmp _TimerIntterupt0
-      00000E                          7 _main:
-      00000E 75 89 00         [24]    8   mov _TMOD,#0x00  ;定时器0，方式0，13位定时器
-      000011 D2 AF            [12]    9   setb _EA
-      000013 D2 A9            [12]   10   setb _ET0
-      000015 74 00            [12]   11   mov a,#0x00
-      000017 12 00 26         [24]   12   lcall _FindStartT0
-      00001A                         13 01$:
-      00001A 80 FE            [24]   14   sjmp 01$
-                                     15 
-                                     16 
-      00001C                         17 _TimerIntterupt0:
-      00001C C2 8C            [12]   18   clr _TR0
-      00001E 74 00            [12]   19   mov a,#0x00
-      000020 12 00 26         [24]   20   lcall _FindStartT0
-      000023 B2 95            [12]   21   cpl _P1_5               ;取反输出波形
-      000025 32               [24]   22   reti
-                                     23 
-                                     24 
-                                     25 
-      000026                         26 _FindStartT0:
-      000026 90 10 00         [24]   27   mov dptr,#0x1000
-      000029 93               [24]   28   movc a,@a+dptr
-      00002A F5 8A            [12]   29   mov _TL0,a            ;查表赋值低位
-      00002C 90 10 10         [24]   30   mov dptr,#0x1010
-      00002F 74 00            [12]   31   mov a,#0x00
-      000031 93               [24]   32   movc a,@a+dptr
-      000032 F5 8C            [12]   33   mov _TH0,a            ;查表赋值高位
-      000034 D2 8C            [12]   34   setb _TR0             ;启动定时器0
-      000036 22               [24]   35   ret
-                                     36 
-                                     37 
-      001000                         38 .org 0x1000               ;TL
-      001000 11 21                   39 .db 0x11,0x21
-      001010                         40 .org 0x1010               ;TH
-      001010 1E 3C                   41 .db 0x1e,0x3c
+      00000B 02 00 33         [24]    6 ljmp _TimerIntterupt0
+      00001B                          7 .org 0x001b
+      00001B 02 00 3B         [24]    8 ljmp _TimerIntterupt1
+                                      9 
+      00001E                         10 _main:
+      00001E 75 89 10         [24]   11   mov _TMOD,#0x10  ;timer0,13bit;timer1, 16bit
+      000021 D2 AF            [12]   12   setb _EA
+      000023 D2 A9            [12]   13   setb _ET0
+      000025 D2 AB            [12]   14   setb _ET1
+      000027 74 00            [12]   15   mov a,#0x00
+      000029 7A 14            [12]   16   mov r2,#20
+      00002B 12 00 54         [24]   17   lcall _FindStartT0
+      00002E 12 00 4B         [24]   18   lcall _StartT1
+      000031                         19 01$:
+      000031 80 FE            [24]   20   sjmp 01$
+                                     21 
+                                     22 
+      000033                         23 _TimerIntterupt0:
+      000033 C2 8C            [12]   24   clr _TR0
+      000035 12 00 54         [24]   25   lcall _FindStartT0
+      000038 B2 95            [12]   26   cpl _P1_5               ;取反输出波形
+      00003A 32               [24]   27   reti
+                                     28 
+      00003B                         29 _TimerIntterupt1:
+      00003B C2 8E            [12]   30   clr _TR1
+      00003D DA 08            [24]   31   djnz r2,01$           ;50ms*20=1s延时，r2=0时，改变指针a，使定时器0定时时间改变
+      00003F 7A 14            [12]   32   mov r2,#20
+      000041 04               [12]   33   inc a                 ;a值查表，
+      000042 B4 02 02         [24]   34   cjne a,#0x02,01$
+      000045 74 00            [12]   35   mov a,#0x00
+      000047                         36 01$:
+      000047 12 00 4B         [24]   37   lcall _StartT1
+      00004A 32               [24]   38   reti
+                                     39 
+      00004B                         40 _StartT1:
+      00004B 85 3C 8D         [24]   41   mov _TH1,0x3c
+      00004E 85 B0 8B         [24]   42   mov _TL1,0xb0
+      000051 D2 8E            [12]   43   setb _TR1
+      000053 22               [24]   44   ret
+                                     45 
+      000054                         46 _FindStartT0:
+      000054 FC               [12]   47   mov r4,a
+      000055 90 10 00         [24]   48   mov dptr,#0x1000
+      000058 93               [24]   49   movc a,@a+dptr
+      000059 F5 8A            [12]   50   mov _TL0,a            ;查表赋值低位
+      00005B 90 10 10         [24]   51   mov dptr,#0x1010
+      00005E EC               [12]   52   mov a,r4
+      00005F 93               [24]   53   movc a,@a+dptr
+      000060 F5 8C            [12]   54   mov _TH0,a            ;查表赋值高位
+      000062 D2 8C            [12]   55   setb _TR0             ;启动定时器0
+      000064 EC               [12]   56   mov a,r4
+      000065 22               [24]   57   ret
+                                     58 
+                                     59 ;timer0
+      001000                         60 .org 0x1000               ;TL
+      001000 11 88                   61 .db 0x11,0x88
+      001010                         62 .org 0x1010               ;TH
+      001010 1E 1F                   63 .db 0x1e,0x1f

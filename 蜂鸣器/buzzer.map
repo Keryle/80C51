@@ -3,7 +3,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-home3                               00000000    00000002 =           2. bytes (ABS,CON)
+home4                               00000000    00000002 =           2. bytes (ABS,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -29,9 +29,11 @@ home3                               00000000    00000002 =           2. bytes (A
      00000000  s_home1                         
      00000000  s_home2                         
      00000000  s_home3                         
-     00000002  l_home2                         
+     00000000  s_home4                         
      00000002  l_home3                         
+     00000002  l_home4                         
      00000003  l_home0                         
+     00000003  l_home1                         
      00000008  s_REG_BANK_1                    
      00000010  s_REG_BANK_2                    
      00000018  s_BIT_BANK                      
@@ -39,8 +41,8 @@ home3                               00000000    00000002 =           2. bytes (A
      00000018  s_REG_BANK_3                    
      00000020  s_BSEG_BYTES                    
      00000020  s__CODE                         
-     0000002C  l_home1                         
-     0000002F  l_DSEG                          
+     0000004B  l_home2                         
+     00000051  l_DSEG                          
      00000100  l_IRAM                          
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
@@ -48,7 +50,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-home2                               00000000    00000002 =           2. bytes (ABS,CON)
+home3                               00000000    00000002 =           2. bytes (ABS,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -57,7 +59,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-home1                               00000000    0000002C =          44. bytes (ABS,CON)
+home2                               00000000    0000004B =          75. bytes (ABS,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -66,11 +68,20 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-home0                               00000000    00000003 =           3. bytes (ABS,CON)
+home1                               00000000    00000003 =           3. bytes (ABS,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
 ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+home0                               00000000    00000003 =           3. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -81,22 +92,22 @@ Area                                    Addr        Size        Decimal Bytes (A
       -----  --------------------------------   ------------------------
      00000000  .__.ABS.                           
 
-ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
+ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-DSEG                                00000000    0000002F =          47. bytes (REL,CON)
+DSEG                                00000000    00000051 =          81. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
+ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
 
 Files Linked                              [ module(s) ]
 
 C:\Users\HP\A51\·äÃùÆ÷.\buzzer.rel        [  ]
 
-ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
+ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
 
 User Base Address Definitions
 
