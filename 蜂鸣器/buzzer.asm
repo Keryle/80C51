@@ -8,14 +8,17 @@ _main:
   mov _TMOD,0x00  ;定时器0，方式0，13位定时器
   setb _EA
   setb _ET0
+  mov a,0x00
+  lcall _FindStartT0
 01$:
   sjmp 01$
 
 
 _TimerIntterupt0:
   clr _TR0
+  mov a,0x00
   lcall _FindStartT0
-  cpl _P1_5
+  cpl _P1_5               ;取反输出波形
 
 
 
@@ -29,7 +32,7 @@ _FindStartT0:
   setb _TR0             ;启动定时器0
 
 
-.org 0x1000
+.org 0x1000               ;TL
 .db 0x11,0x21
-.org 0x1010
-.db 0x22,0x3c
+.org 0x1010               ;TH
+.db 0x1e,0x3c
