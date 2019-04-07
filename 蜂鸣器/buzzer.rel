@@ -6,8 +6,8 @@ A home size 0 flags 8 addr 0
 A home0 size 3 flags 8 addr 0
 A home1 size 3 flags 8 addr B
 A home2 size 4B flags 8 addr 1B
-A home3 size 2 flags 8 addr 1000
-A home4 size 2 flags 8 addr 1010
+A home3 size 2 flags 8 addr 70
+A home4 size 2 flags 8 addr 80
 T 00 00 00
 R 00 00 00 02
 T 00 00 00 02 00 1E
@@ -48,15 +48,15 @@ T 00 00 4B 85 3C 8D 85 B0 8B D2 8E 22
 R 00 00 00 04
 T 00 00 54
 R 00 00 00 04
-T 00 00 54 FC 90 10 00 93 F5 8A 90 10 10 EC 93 F5
+T 00 00 54 FC 90 00 70 93 F5 8A 90 00 80 EC 93 F5
 R 00 00 00 04
 T 00 00 61 8C D2 8C EC 22
 R 00 00 00 04
-T 00 10 00
+T 00 00 70
 R 00 00 00 05
-T 00 10 00 11 88
+T 00 00 70 11 88
 R 00 00 00 05
-T 00 10 10
+T 00 00 80
 R 00 00 00 06
-T 00 10 10 1E 1F
+T 00 00 80 1E 1F
 R 00 00 00 06
