@@ -5,7 +5,6 @@ ljmp _main
 .org 0x0023
 ljmp _InttS
 
-
 _main:
   setb _EA
   setb _ES             ;开启窜口中断
