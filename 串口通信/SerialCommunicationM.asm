@@ -27,3 +27,4 @@ _InttX0:
   clr _TI              ;  清除发送完成标志
   cpl _P2_2             ;接的led灯显示中断已经触发
   reti
+  
