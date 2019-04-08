@@ -2,7 +2,7 @@
 .area home (abs)
 .org 0x0000
 ljmp _main
-org 0x0023
+.org 0x0023
 ljmp _InttS
 
 
