@@ -2,17 +2,15 @@
 .area home (abs)
 ljmp _main
 nop
+
+;延时函数
 _delay:
-  push r7
-  push r6
   mov r7,#50
 02$:
   mov r6,#100
 01$:
   djnz r6,01$
   djnz r7,02$   ;(2*100+1)*50约为10ms
-  pop r6
-  pop r7
   ret
 
 ;扫描函数
@@ -68,33 +66,38 @@ _KeyDown:
 16$:
   setb 0x10                 ;可能同时有多个按键按下，置位报错
   ret
+
+;求出按键的地址
 30$:
   mov a,r2
   clr c
-  subb r2,#1
+  subb a,#1
   mov b,#4
   mul ab
-  add a,r3              ;求出按键的地址
-  push a
-  mov r7,#50
+  add a,r3
+
+;判断按键是否松开
+  mov r5,#50
 41$:
   mov r4,_P1
   cjne r4,#0xf0,40$
-  pop a
-  ret
+  sjmp 50$
 40$:
   lcall _delay
-  djnz r7,41$:
-  pop a
-  cjne a，#0x02，51$
+  djnz r5,41$
+50$:
+  cjne a,#0x02,51$
+  setb 0x11
   ret
 51$:
-  setb 0x11
+  mov _DPL,a            ;传递到dpl
   ret
 _main:
 01$:
   lcall _KeyDown
-  jnb #0x11,01$
+  jnb 0x11,01$
+  clr _P3_7
+  mov a,_DPL
   cjne a,#0x01,01$
   mov _P2,#0xf9
   sjmp 01$
