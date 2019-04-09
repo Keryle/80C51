@@ -4,7 +4,7 @@
 ;--------------------------------------------------------
 	.module main
 	.optsdcc -mmcs51 --model-small
-	
+
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
@@ -272,11 +272,11 @@ _TF2	=	0x00cf
 _KeyValue::
 	.ds 1
 ;--------------------------------------------------------
-; overlayable items in internal ram 
+; overlayable items in internal ram
 ;--------------------------------------------------------
 	.area	OSEG    (OVR,DATA)
 ;--------------------------------------------------------
-; Stack segment in internal ram 
+; Stack segment in internal ram
 ;--------------------------------------------------------
 	.area	SSEG
 __start__stack:
@@ -322,7 +322,7 @@ __start__stack:
 	.area GSFINAL (CODE)
 	.area CSEG    (CODE)
 ;--------------------------------------------------------
-; interrupt vector 
+; interrupt vector
 ;--------------------------------------------------------
 	.area HOME    (CODE)
 __interrupt_vect:
@@ -357,7 +357,7 @@ __sdcc_program_startup:
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'delay'
 ;------------------------------------------------------------
-;i                         Allocated to registers 
+;i                         Allocated to registers
 ;------------------------------------------------------------
 ;	.\main.c:29: void delay(u16 i)
 ;	-----------------------------------------
@@ -374,7 +374,7 @@ _delay:
 	ar0 = 0x00
 	mov	r6,dpl
 	mov	r7,dph
-;	.\main.c:31: while(i--);	
+;	.\main.c:31: while(i--);
 00101$:
 	mov	ar4,r6
 	mov	ar5,r7
@@ -390,7 +390,7 @@ _delay:
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'KeyDown'
 ;------------------------------------------------------------
-;a                         Allocated to registers r7 
+;a                         Allocated to registers r7
 ;------------------------------------------------------------
 ;	.\main.c:40: void KeyDown(void)
 ;	-----------------------------------------
@@ -398,16 +398,16 @@ _delay:
 ;	-----------------------------------------
 _KeyDown:
 ;	.\main.c:43: GPIO_KEY=0x0f;
-;	.\main.c:44: if(GPIO_KEY!=0x0f)//¶ÁÈ¡°´¼üÊÇ·ñ°´ÏÂ
+;	.\main.c:44: if(GPIO_KEY!=0x0f)//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
 	mov	a,#0x0f
 	mov	_P1,a
 	cjne	a,_P1,00174$
 	ret
 00174$:
-;	.\main.c:46: delay(1000);//ÑÓÊ±10ms½øÐÐÏû¶¶
+;	.\main.c:46: delay(1000);//ï¿½ï¿½Ê±10msï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	mov	dptr,#0x03e8
 	lcall	_delay
-;	.\main.c:47: if(GPIO_KEY!=0x0f)//ÔÙ´Î¼ì²â¼üÅÌÊÇ·ñ°´ÏÂ
+;	.\main.c:47: if(GPIO_KEY!=0x0f)//ï¿½Ù´Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
 	mov	a,#0x0f
 	cjne	a,_P1,00175$
 	ret
@@ -481,7 +481,7 @@ _KeyDown:
 	mov	a,#0x0c
 	add	a,r7
 	mov	_KeyValue,a
-;	.\main.c:67: while((a<50)&&(GPIO_KEY!=0xf0))	 //¼ì²â°´¼üËÉÊÖ¼ì²â
+;	.\main.c:67: while((a<50)&&(GPIO_KEY!=0xf0))	 //ï¿½ï¿½ï¿½â°´ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½
 00133$:
 	mov	r7,#0x00
 00112$:
@@ -513,7 +513,7 @@ _KeyDown:
 _main:
 ;	.\main.c:86: while(1)
 00102$:
-;	.\main.c:88: KeyDown();		   //°´¼üÅÐ¶Ïº¯Êý
+;	.\main.c:88: KeyDown();		   //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ïºï¿½ï¿½ï¿½
 	lcall	_KeyDown
 ;	.\main.c:91: }
 	sjmp	00102$
