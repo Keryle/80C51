@@ -8,9 +8,9 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _Timer0
 	.globl _main
-	.globl _Timer0Init
+	.globl _KeyDown
+	.globl _delay
 	.globl _TF2
 	.globl _EXF2
 	.globl _RCLK
@@ -130,6 +130,7 @@
 	.globl _DPL
 	.globl _SP
 	.globl _P0
+	.globl _KeyValue
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -268,11 +269,12 @@ _TF2	=	0x00cf
 ; internal ram data
 ;--------------------------------------------------------
 	.area DSEG    (DATA)
-_Timer0_i_65536_3:
-	.ds 2
+_KeyValue::
+	.ds 1
 ;--------------------------------------------------------
 ; overlayable items in internal ram 
 ;--------------------------------------------------------
+	.area	OSEG    (OVR,DATA)
 ;--------------------------------------------------------
 ; Stack segment in internal ram 
 ;--------------------------------------------------------
@@ -325,9 +327,6 @@ __start__stack:
 	.area HOME    (CODE)
 __interrupt_vect:
 	ljmp	__sdcc_gsinit_startup
-	reti
-	.ds	7
-	ljmp	_Timer0
 ;--------------------------------------------------------
 ; global & static initialisations
 ;--------------------------------------------------------
@@ -356,13 +355,15 @@ __sdcc_program_startup:
 ;--------------------------------------------------------
 	.area CSEG    (CODE)
 ;------------------------------------------------------------
-;Allocation info for local variables in function 'Timer0Init'
+;Allocation info for local variables in function 'delay'
 ;------------------------------------------------------------
-;	.\main.c:19: void Timer0Init()
+;i                         Allocated to registers 
+;------------------------------------------------------------
+;	.\main.c:29: void delay(u16 i)
 ;	-----------------------------------------
-;	 function Timer0Init
+;	 function delay
 ;	-----------------------------------------
-_Timer0Init:
+_delay:
 	ar7 = 0x07
 	ar6 = 0x06
 	ar5 = 0x05
@@ -371,80 +372,151 @@ _Timer0Init:
 	ar2 = 0x02
 	ar1 = 0x01
 	ar0 = 0x00
-;	.\main.c:21: TMOD|=0X01;//选择为定时器0模式，工作方式1，仅用TR0打开启动。
-	orl	_TMOD,#0x01
-;	.\main.c:23: TH0=0XFC;	//给定时器赋初值，定时1ms
-	mov	_TH0,#0xfc
-;	.\main.c:24: TL0=0X18;	
-	mov	_TL0,#0x18
-;	.\main.c:25: ET0=1;//打开定时器0中断允许
-;	assignBit
-	setb	_ET0
-;	.\main.c:26: EA=1;//打开总中断
-;	assignBit
-	setb	_EA
-;	.\main.c:27: TR0=1;//打开定时器			
-;	assignBit
-	setb	_TR0
-;	.\main.c:28: }
+	mov	r6,dpl
+	mov	r7,dph
+;	.\main.c:31: while(i--);	
+00101$:
+	mov	ar4,r6
+	mov	ar5,r7
+	dec	r6
+	cjne	r6,#0xff,00111$
+	dec	r7
+00111$:
+	mov	a,r4
+	orl	a,r5
+	jnz	00101$
+;	.\main.c:32: }
+	ret
+;------------------------------------------------------------
+;Allocation info for local variables in function 'KeyDown'
+;------------------------------------------------------------
+;a                         Allocated to registers r7 
+;------------------------------------------------------------
+;	.\main.c:40: void KeyDown(void)
+;	-----------------------------------------
+;	 function KeyDown
+;	-----------------------------------------
+_KeyDown:
+;	.\main.c:43: GPIO_KEY=0x0f;
+;	.\main.c:44: if(GPIO_KEY!=0x0f)//读取按键是否按下
+	mov	a,#0x0f
+	mov	_P1,a
+	cjne	a,_P1,00174$
+	ret
+00174$:
+;	.\main.c:46: delay(1000);//延时10ms进行消抖
+	mov	dptr,#0x03e8
+	lcall	_delay
+;	.\main.c:47: if(GPIO_KEY!=0x0f)//再次检测键盘是否按下
+	mov	a,#0x0f
+	cjne	a,_P1,00175$
+	ret
+00175$:
+;	.\main.c:50: GPIO_KEY=0X0F;
+	mov	_P1,#0x0f
+;	.\main.c:51: switch(GPIO_KEY)
+	mov	r7,_P1
+	cjne	r7,#0x07,00176$
+	sjmp	00101$
+00176$:
+	cjne	r7,#0x0b,00177$
+	sjmp	00102$
+00177$:
+	cjne	r7,#0x0d,00178$
+	sjmp	00103$
+00178$:
+;	.\main.c:53: case(0X07):	KeyValue=0;break;
+	cjne	r7,#0x0e,00105$
+	sjmp	00104$
+00101$:
+	mov	_KeyValue,#0x00
+;	.\main.c:54: case(0X0b):	KeyValue=1;break;
+	sjmp	00105$
+00102$:
+	mov	_KeyValue,#0x01
+;	.\main.c:55: case(0X0d): KeyValue=2;break;
+	sjmp	00105$
+00103$:
+	mov	_KeyValue,#0x02
+;	.\main.c:56: case(0X0e):	KeyValue=3;break;
+	sjmp	00105$
+00104$:
+	mov	_KeyValue,#0x03
+;	.\main.c:57: }
+00105$:
+;	.\main.c:59: GPIO_KEY=0XF0;
+	mov	_P1,#0xf0
+;	.\main.c:60: switch(GPIO_KEY)
+	mov	r7,_P1
+	cjne	r7,#0x70,00180$
+	sjmp	00133$
+00180$:
+	cjne	r7,#0xb0,00181$
+	sjmp	00107$
+00181$:
+	cjne	r7,#0xd0,00182$
+	sjmp	00108$
+00182$:
+;	.\main.c:62: case(0X70):	KeyValue=KeyValue;break;
+	cjne	r7,#0xe0,00133$
+	sjmp	00109$
+;	.\main.c:63: case(0Xb0):	KeyValue=KeyValue+4;break;
+	sjmp	00133$
+00107$:
+	mov	r7,_KeyValue
+	mov	a,#0x04
+	add	a,r7
+	mov	_KeyValue,a
+;	.\main.c:64: case(0Xd0): KeyValue=KeyValue+8;break;
+	sjmp	00133$
+00108$:
+	mov	r7,_KeyValue
+	mov	a,#0x08
+	add	a,r7
+	mov	_KeyValue,a
+;	.\main.c:65: case(0Xe0):	KeyValue=KeyValue+12;break;
+	sjmp	00133$
+00109$:
+	mov	r7,_KeyValue
+	mov	a,#0x0c
+	add	a,r7
+	mov	_KeyValue,a
+;	.\main.c:67: while((a<50)&&(GPIO_KEY!=0xf0))	 //检测按键松手检测
+00133$:
+	mov	r7,#0x00
+00112$:
+	cjne	r7,#0x32,00184$
+00184$:
+	jnc	00119$
+	mov	a,#0xf0
+	cjne	a,_P1,00186$
+	ret
+00186$:
+;	.\main.c:69: delay(1000);
+	mov	dptr,#0x03e8
+	push	ar7
+	lcall	_delay
+	pop	ar7
+;	.\main.c:70: a++;
+	inc	r7
+	sjmp	00112$
+00119$:
+;	.\main.c:74: }
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'main'
 ;------------------------------------------------------------
-;	.\main.c:36: void main()
+;	.\main.c:83: void main()
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-;	.\main.c:38: Timer0Init();  //定时器0初始化
-	lcall	_Timer0Init
-;	.\main.c:39: while(1);		
+;	.\main.c:86: while(1)
 00102$:
-;	.\main.c:40: }
+;	.\main.c:88: KeyDown();		   //按键判断函数
+	lcall	_KeyDown
+;	.\main.c:91: }
 	sjmp	00102$
-;------------------------------------------------------------
-;Allocation info for local variables in function 'Timer0'
-;------------------------------------------------------------
-;i                         Allocated with name '_Timer0_i_65536_3'
-;------------------------------------------------------------
-;	.\main.c:48: void Timer0() __interrupt 1
-;	-----------------------------------------
-;	 function Timer0
-;	-----------------------------------------
-_Timer0:
-	push	acc
-	push	psw
-;	.\main.c:51: TH0=0XFC;	//给定时器赋初值，定时1ms
-	mov	_TH0,#0xfc
-;	.\main.c:52: TL0=0X18;
-	mov	_TL0,#0x18
-;	.\main.c:53: i++;
-	inc	_Timer0_i_65536_3
-	clr	a
-	cjne	a,_Timer0_i_65536_3,00109$
-	inc	(_Timer0_i_65536_3 + 1)
-00109$:
-;	.\main.c:54: if(i==1000)
-	mov	a,#0xe8
-	cjne	a,_Timer0_i_65536_3,00103$
-	mov	a,#0x03
-	cjne	a,(_Timer0_i_65536_3 + 1),00103$
-;	.\main.c:56: i=0;
-	clr	a
-	mov	_Timer0_i_65536_3,a
-	mov	(_Timer0_i_65536_3 + 1),a
-;	.\main.c:57: P2_0=~P2_0;	
-;	assignBit
-	setb	_P2_0
-00103$:
-;	.\main.c:59: }
-	pop	psw
-	pop	acc
-	reti
-;	eliminated unneeded mov psw,# (no regs used in bank)
-;	eliminated unneeded push/pop dpl
-;	eliminated unneeded push/pop dph
-;	eliminated unneeded push/pop b
 	.area CSEG    (CODE)
 	.area CONST   (CODE)
 	.area XINIT   (CODE)
