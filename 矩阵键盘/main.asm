@@ -15,6 +15,7 @@ _delay:
   ret
 
 ;扫描函数
+;使用寄存器r2,r3,r4,r6,r7
 _KeyDown:
   mov _P1,#0x0f
   mov a,_P1
@@ -41,7 +42,7 @@ sjmp 102$
 101$:
   cjne a,#0x07,03$
   mov r2,#4
-  sjmp 20$                ;第1行
+  sjmp 20$                ;第4行
 03$:
   cjne a,#0x0b,04$
   mov r2,#3
@@ -67,7 +68,7 @@ sjmp 102$
 
   cjne a,#0x70,13$
   mov r3,#1
-  sjmp 30$                 ;第4列
+  sjmp 30$                 ;第1列
 13$:
   cjne a,#0xb0,14$
   mov r3,#2
@@ -84,7 +85,7 @@ sjmp 102$
   setb 0x10                 ;可能同时有多个按键按下，置位报错
   ret
 
-;求出按键的地址
+;求出按键的地址，r2保存行值，r3保存列值
 30$:
   mov a,r2
   clr c
@@ -102,20 +103,23 @@ sjmp 102$
 ;停止按钮位地址设定
 ;-----------------------------------------
   cjne a,#0x04,51$
-  setb 0x11
+  setb 0x11           ;退出标志位
   ret
 51$:
+;------------------------------------------
+;将DPL传递到DPH，再传递按键的地址到DPL
+;------------------------------------------
+  mov _DPH,_DPL
   mov _DPL,a
   ret
-_main:
 
+_main:
 01$:
   lcall _KeyDown
   jnb 0x11,01$
   clr 0x11
   cpl _P3_7
-  clr _P3_1
-  mov a,_DPL
-  cjne a,#0x01,01$
-  mov _P2,#0xf9
+  mov a,_DPL            ;将按键地址传递到a
+  cjne a,#0x01,01$      ;判断按键地址是否是1
+  mov _P2,#0xf9         ;数码管显示1
   sjmp 01$
