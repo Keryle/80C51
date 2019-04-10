@@ -54,7 +54,7 @@ sjmp 102$
   mov r2,#4
   sjmp 20$
 06$:
-  setb 0x11
+  clr _P3_2
                         ;可能同时有多个按键按下，置位报错
 20$:
 
@@ -105,14 +105,14 @@ sjmp 102$
   setb 0x11
   ret
 51$:
-  mov _DPL,a            ;传递到dpl
-  ret
+  clr _P3_2
 
 _main:
 
 01$:
   lcall _KeyDown
   jnb 0x11,01$
+  clr 0x11
   cpl _P3_7
   clr _P3_1
   mov a,_DPL
