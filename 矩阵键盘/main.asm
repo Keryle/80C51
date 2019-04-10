@@ -1,5 +1,6 @@
 .include /asm51.h/
 .area home (abs)
+
 ljmp _main
 nop
 
@@ -39,26 +40,25 @@ _KeyDown:
 sjmp 102$
 101$:
   cjne a,#0x07,03$
-  mov r2,#1
+  mov r2,#4
   sjmp 20$                ;第1行
 03$:
   cjne a,#0x0b,04$
-  mov r2,#2
+  mov r2,#3
   sjmp 20$
 04$:
   cjne a,#0x0d,05$
-  mov r2,#3
+  mov r2,#2
   sjmp 20$
 05$:
   cjne a,#0x0e,06$
-  mov r2,#4
+  mov r2,#1
   sjmp 20$
 06$:
-  clr _P3_2
+  setb 0x10
+  ret
                         ;可能同时有多个按键按下，置位报错
 20$:
-
-
   mov _P1,#0xf0            ;判断列，高电平被拉低
   nop
   mov a,_P1
@@ -66,19 +66,19 @@ sjmp 102$
 
 
   cjne a,#0x70,13$
-  mov r3,#4
+  mov r3,#1
   sjmp 30$                 ;第4列
 13$:
   cjne a,#0xb0,14$
-  mov r3,#3
+  mov r3,#2
   sjmp 30$
 14$:
   cjne a,#0xd0,15$
-  mov r3,#2
+  mov r3,#3
   sjmp 30$
 15$:
   cjne a,#0xe0,16$
-  mov r3,#1
+  mov r3,#4
   sjmp 30$
 16$:
   setb 0x10                 ;可能同时有多个按键按下，置位报错
@@ -92,21 +92,21 @@ sjmp 102$
   mov b,#4
   mul ab
   add a,r3
-  mov a,r2
 
 ;判断按键是否松开
   mov _P1,#0xf0
 40$:
   mov r4,_P1
   cjne r4,#0xf0,40$
-
-
-  cjne a,#0x02,51$
+;-----------------------------------------
+;停止按钮位地址设定
+;-----------------------------------------
+  cjne a,#0x04,51$
   setb 0x11
   ret
 51$:
-  clr _P3_2
-
+  mov _DPL,a
+  ret
 _main:
 
 01$:
