@@ -4,4 +4,3 @@ ljmp _main
 
 .org 0x0030
 _main:
-  
