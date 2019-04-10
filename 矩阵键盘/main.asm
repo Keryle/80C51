@@ -16,20 +16,27 @@ _delay:
 ;扫描函数
 _KeyDown:
   mov _P1,#0x0f
-  nop
   mov a,_P1
-  cjne a,#0x0f,01$
+  anl a,#0x0f
+  mov b,a
+  mov _P1,#0xf0
+  mov a,_P1
+  anl a,#0xf0
+  orl a,b
+  cjne a,#0xff,01$
   ret
 01$:                       ;判断按键是否按下
   lcall _delay
   mov a,_P1
-  cjne a,#0x0f,02$
+  cjne a,#0xf0,02$
   ret                       ;延时再次判断
 02$:
   mov _P1,#0x0f            ;判断行，高电平被拉低
+  anl a,#0x0f
   mov r0,_P1
   cjne r0,#0x07,03$
   mov r2,#1
+  clr _P3_7
   sjmp 20$                ;第1行
 03$:
   cjne r0,#0x0b,04$
