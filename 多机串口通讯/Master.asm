@@ -26,7 +26,7 @@ _main:
 
 _SerialCom:
 ;定时器T1方式2 波特率2400 不加倍
-    mov _TOMD,#0x20
+    mov _TMOD,#0x20
     mov _TH1,#0xf3
     mov _TL1,#0xf3
     setb _TR1
@@ -57,6 +57,7 @@ _SerialCom:
     mov _SBUF,r3
 04$:jnb _TI,04$
 05$:jnb _RI,05$
+
     clr _RI
     clr _TI
     ;接收从机返回信号
