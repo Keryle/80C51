@@ -32,7 +32,7 @@ _SerialIntt:
     setb _RS0
     clr _RS1
     mov a,_SBUF
-    xrl a,#0x01
+    xrl a,#0x01;是否等于本机地址
     jz 01$
 90$:                ;返回
     pop _PSW
@@ -49,7 +49,7 @@ _SerialIntt:
     jnb _RI,102$
     clr _RI         ;接收命令帧
     clr _TI
-    jb _RB,90$
+    jb _RB8,91$
     mov a,_SBUF
     ;判断命令帧类型
     ;接收
@@ -58,7 +58,7 @@ _SerialIntt:
 103$:
     jnb _TI,103$
 02$:jnb _RI,02$
-
+    clr _TI
     clr _RI
     mov @r0,_SBUF
     inc r0
@@ -67,7 +67,7 @@ _SerialIntt:
 
     ;发送
 10$:
-    cjne a,#0xff,90$
+    cjne a,#0xff,91$
     mov _SBUF,#0x02
 104$:
     jnb _TI,104$
@@ -75,4 +75,7 @@ _SerialIntt:
     mov _SBUF,@r1
     inc r1
     djnz r2,104$
+    sjmp 90$
+91$:
+    mov _SBUF,#0x00
     sjmp 90$
