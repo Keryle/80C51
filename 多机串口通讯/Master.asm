@@ -11,6 +11,7 @@ _main:
     mov r3,#0x00
     mov r4,#0x01
     lcall _SerialCom
+    clr _P3_7
 01$:
     sjmp 01$
 ;-------------------------------------
