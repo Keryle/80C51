@@ -3,22 +3,49 @@
 .org 0x0000
 ljmp _main
 
-.org 0x0030
+.org 0x1030
+.db 0x00,0x01,0x02,0x03,0x00,0x04,0x05,0x06
+.db 0x00,0x07,0x08,0x09,0x00,0x00,0x00,0x00
+.org 0x0040
 _main:
-    mov _PSW,#0x60
+    mov _PSW,#0x65
 02$:
     lcall _KeyDown
-    jb 0x12,02$
-    jb 0x13,02$
+    jnb 0x11,02$
+    clr 0x11
+    jnb 0x12,02$
+    jnb 0x13,02$
+
+    acall _KeyTranslate
 
     mov r0,#0x50    ;数据地址
     mov r2,0x40     ;从机地址保存地址
     mov r3,#0x00    ;控制命令
     mov r4,#0x01    ;数据位数
-    lcall _SerialCom
+    mov a,r2
+    cjne a,#1,9$
     clr _P3_7
+9$:
+    lcall _SerialCom
+    clr _P3_6
 01$:
     sjmp 01$
+
+;------------------------------
+;按键地址键值转换函数
+;------------------------------
+_KeyTranslate:
+    mov r0,#0x50  ;数据地址
+    mov r7,#10
+01$:
+    mov dptr,#0x1030  ;表格地址
+    mov a,@r0
+    movc a,@a+dptr
+    mov @r0,a
+    inc r0
+    djnz r7,01$
+    ret
+
 
 _delay:
     mov r7,#50
@@ -134,6 +161,7 @@ _KeyDown:
     cjne a,#8,53$
     setb 0x12
     mov r0,#0x50
+    ret
 ;---------------------------------
 ;地址按钮位地址设定
 ;--------------------------------
@@ -141,11 +169,12 @@ _KeyDown:
     cjne a,#12,54$
     setb 0x13
     mov r0,#0x40
+    ret
 ;------------------------------------------
 ;将数据存入r0指针指向的地址
 ;------------------------------------------
 54$:
-    mov @r0，a
+    mov @r0,a
     inc r0
     ret
 

@@ -4,7 +4,8 @@
 ljmp _main
 .org 0x0023
 ljmp _SerialIntt
-
+.org 0x0700
+.db 0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90
 .org 0x0030
 _main:
     mov _SP,#0x60   ;堆栈指针
@@ -21,9 +22,10 @@ _main:
     mov 0x0a,#0x01 ;1组r2,字节数
 01$:
     mov a,0x40
-    cjne a,#0x11,01$
+    cjne a,#0x05,01$
     clr _P3_7
     sjmp 01$
+
 
 _SerialIntt:
     clr _RI
@@ -61,6 +63,12 @@ _SerialIntt:
     clr _TI
     clr _RI
     mov @r0,_SBUF
+;显示数值
+    mov a,@r0
+    mov dptr,#0x0700
+    movc a,@a+dptr
+
+    mov _P2,a
     inc r0
     djnz r2,02$
     sjmp 90$        ;退出
