@@ -71,6 +71,7 @@ _SerialIntt:
     mov _P2,a
     inc r0
     djnz r2,02$
+    mov r2,#0x01
     sjmp 90$        ;退出
 
     ;发送

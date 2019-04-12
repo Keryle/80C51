@@ -2,35 +2,46 @@
 .area home (abs)
 .org 0x0000
 ljmp _main
+.org 0x000b
+ljmp _InttT0
 
-.org 0x1030
+.org 0x1030             ;键盘地址按键值转化表
 .db 0x00,0x01,0x02,0x03,0x00,0x04,0x05,0x06
 .db 0x00,0x07,0x08,0x09,0x00,0x00,0x00,0x00
 .org 0x0040
 _main:
-    mov _PSW,#0x65
-02$:
+    setb _EA
+    setb _ET0
+    mov _PSW,#0x58
+    mov _TMOD,#0x20          ;定时器T1方式2，定时器T0方式0
+
+    setb _TR0                ;启动定时器T0，周期约为8ms
+01$:
+    sjmp 01$
+
+_InttT0:
+    setb _TR0
     lcall _KeyDown
-    jnb 0x11,02$
+    jnb 0x11,90$
     clr 0x11
-    jnb 0x12,02$
-    jnb 0x13,02$
-
+    jnb 0x12,90$
+    jnb 0x13,90$
+    clr 0x12
+    clr 0x13
     acall _KeyTranslate
-
     mov r0,#0x50    ;数据地址
     mov r2,0x40     ;从机地址保存地址
     mov r3,#0x00    ;控制命令
     mov r4,#0x01    ;数据位数
-    mov a,r2
-    cjne a,#1,9$
-    clr _P3_7
-9$:
+    ;判断从机地址是否存在
+    cjne r2,#1,01$
     lcall _SerialCom
-    clr _P3_6
+    cpl _P3_6
 01$:
-    sjmp 01$
-
+    cjne r2,#2,90$
+    lcall _SerialCom
+90$:
+    reti
 ;------------------------------
 ;按键地址键值转换函数
 ;------------------------------
@@ -191,7 +202,7 @@ _KeyDown:
 ;-------------------------------------
 _SerialCom:
 ;定时器T1方式2 波特率2400 不加倍
-    mov _TMOD,#0x20
+
     mov _TH1,#0xf3
     mov _TL1,#0xf3
     setb _TR1
@@ -207,14 +218,14 @@ _SerialCom:
     mov a,r2       ;发送地址
     mov _SBUF,a
 09$:jnb _TI,09$
-02$:jnb _RI,02$
+02$:jnb _RI,02$    ;应在主程序中判断地址是否存在，否则将进入死循环
     clr _RI
     clr _TI
     mov a,_SBUF
     xrl a,r2
     jz 03$          ;应答地址相等转
 91$:                ;复位操作
-    mov _SBUF,#0x00
+    mov _SBUF,#0xfe
     setb _TB8
     sjmp 90$
 03$:
@@ -237,6 +248,7 @@ _SerialCom:
     clr _TI
     inc r0
     djnz r4,11$
+    cpl _P3_7
     ret
     ;接收
 10$:

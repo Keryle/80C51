@@ -28,6 +28,7 @@ _main:
 
 
 _SerialIntt:
+
     clr _RI
     push a
     push _PSW
@@ -71,6 +72,8 @@ _SerialIntt:
     mov _P2,a
     inc r0
     djnz r2,02$
+    mov r2,#0x01
+    cpl _P3_6
     sjmp 90$        ;退出
 
     ;发送
