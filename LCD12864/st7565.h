@@ -2,7 +2,7 @@
 #define __ST7565_H
 
 #include<8052.h>
-#define DELAY \
+#define DELAY \         //内联汇编代码nop
     __asm \
     nop \
     nop \
